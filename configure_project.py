@@ -1,3 +1,4 @@
+import sys, os
 import json
 import yaml
 import string
@@ -5,6 +6,8 @@ import random
 import time
 from fire import Fire
 
+root_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.append(root_dir)
 from logger import logger
 
 import shutil
