@@ -8,13 +8,6 @@ from fire import Fire
 from logger import logger
 
 import shutil
-####
-# Specify the source file path
-source_path = "path/to/source/file.txt"
-
-# Specify the destination file path
-destination_path = "path/to/destination/file.txt"
-
 
 def random_string():
     characters = string.ascii_letters + string.digits
