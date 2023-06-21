@@ -39,6 +39,7 @@ def main(
     positive_label: str,
     negative_label: str,
     cohort_name: str = "none",
+    config_output: str = "./datasaur-api-client/create-project-async/project_configuration.json",
 ):
     # Read the JSON file
     with open(project_template, "r") as file:
@@ -76,7 +77,7 @@ def main(
     ][1]["label"] = negative_label
     # Write the updated data back to the JSON file
     with open(
-        "./datasaur-api-client/create-project-async/project_configuration.json",
+        config_output,
         "w",
     ) as file:
         # with open(project_configuration_path, 'w') as file:
