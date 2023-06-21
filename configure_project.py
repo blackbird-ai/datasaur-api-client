@@ -51,17 +51,17 @@ def main(
     logger.info(f"NEGATIVE LABEL: {negative_label}")
 
     new_document_path = f'./datasaur-api-client/create-project-async/documents/{document_path.split("/")[-1]}'
+    logger.info(f"INITIAL document path: {document_path}")
+    logger.info(f"NEW document path: {new_document_path}")
     # Move the file
-    shutil.move(document_path, new_document_path)
+    #shutil.move(document_path, new_document_path)
 
     # Update the values for the specified keys
     data["variables"]["input"]["name"] = get_project_name(cohort_name)
     data["variables"]["input"]["documents"][0]["fileName"] = new_document_path.split(
         "/"
     )[-1]
-    data["variables"]["input"]["documents"][0]["name"] = new_document_path.split("/")[
-        -1
-    ]
+    data["variables"]["input"]["documents"][0]["name"] = new_document_path.split("/")[-1]
     for i in data["variables"]["input"]["documentAssignments"]:
         i["documents"][0]["fileName"] = new_document_path.split("/")[-1]
     data["variables"]["input"]["documents"][0]["file"]["path"] = new_document_path
