@@ -11,6 +11,7 @@ def create_project(
     client_secret,
     team_id,
     documents_path="./datasaur-api-client/create-project-async/documents",
+    operations_path="./datasaur-api-client/create-project-async/project_configuration.json",
 ):
     try:
         Project.create(
@@ -18,7 +19,7 @@ def create_project(
             client_id,
             client_secret,
             team_id=str(team_id),
-            operations_path="./datasaur-api-client/create-project-async/project_configuration.json",
+            operations_path=operations_path,
             documents_path=documents_path,
         )
     except Exception as e:
