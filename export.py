@@ -42,10 +42,13 @@ def export_project(
     export_file_name: str = None,
     output_dir: str = None,
     output_file: str = None,
+    export_file: str = "./datasaur-api-client/export.json",
+    delivery_file: str = "./datasaur-api-client/get_export_delivery_status.json",
+
 ):
     url = base_url + "/graphql"
     access_token = get_access_token(base_url, client_id, client_secret)
-    operations = get_operations("./datasaur-api-client/export.json")
+    operations = get_operations(file_name=export_file)
 
     operations["variables"]["input"]["fileName"] = export_file_name
     operations["variables"]["input"]["projectIds"] = [project_id]
@@ -58,7 +61,7 @@ def export_project(
 
         if len(json_response["data"]["result"]["fileUrl"]) > 0:
             export_id = json_response["data"]["result"]["exportId"]
-            poll_export_delivery_status(url, access_token, export_id)
+            poll_export_delivery_status(url, access_token, export_id, delivery_path=delivery_file)
 
             file_url = json_response["data"]["result"]["fileUrl"]
             file_response = requests.request("GET", file_url)
@@ -77,8 +80,8 @@ def export_project(
         print(response)
 
 
-def poll_export_delivery_status(url, access_token, export_id):
-    operations = get_operations("./datasaur-api-client/get_export_delivery_status.json")
+def poll_export_delivery_status(url, access_token, export_id, delivery_path="./datasaur-api-client/get_export_delivery_status.json"):
+    operations = get_operations(file_name=delivery_path)
     operations["variables"]["exportId"] = export_id
     while True:
         time.sleep(POOLING_INVERVAL)
@@ -112,7 +115,7 @@ def get_access_token(base_url, client_id, client_secret):
     return token["access_token"]
 
 
-def get_operations(file_name):
+def get_operations(file_name=None):
     with open(file_name, "r") as file:
         return json.loads(file.read())
 
