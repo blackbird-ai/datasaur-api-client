@@ -23,7 +23,14 @@ def save_file_to_tsv(content=None, output_file=None):
         file_list = archive.namelist()
         for file in file_list:
             print(file)
-            if (file.endswith("tsv")) and ("DOCUMENT" in file):
+            if (file.endswith("tsv")):
+                # Read the contents of a specific file
+                specific_file_content = archive.read(file)
+                data = specific_file_content.decode("utf-8")
+                data_stream = io.StringIO(data)
+                df = pd.read_csv(data_stream, sep="\t")
+                print(df.head())
+            if (file.endswith("tsv")) and ("REVIEW" in file):
                 # Read the contents of a specific file
                 specific_file_content = archive.read(file)
                 data = specific_file_content.decode("utf-8")
