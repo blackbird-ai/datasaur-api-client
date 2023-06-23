@@ -1,5 +1,30 @@
-# Datasaur API Client Sample
+# Blackbird.AI Specific documentation
 
+## Upload binary annotation project
+
+### Step 1: Configure project script
+This script updates the ```./project_configuration.json``` file with the project specific details. The ```./project_configuration.json``` is the "operations file" which contain the JSON operation to be executed in the next step, create project.
+```
+python ./configure_project.py --document_path ./file_to_annotate.tsv --project_template ./configs/binary_config.json --positive_label anti-semitic --negative_label 'not anti-semitic' --cohort_name anti-semitic --config_output ./project_configuration.json
+```
+
+### Step 2: Create project script
+```
+python ./create-project-async/api_client.py create_project --base_url https://app.datasaur.ai --client_id <CLIENT_ID> --client_secret <CLIENT_SECRET> --team_id 455 --documents_path <PATH_TO_file_to_annotate.tsv> --operations_path <PATH_TO_project_configuration.json>
+```
+
+## Export completed annotations
+### Step 1: Export script
+```
+python ./export.py --base_url https://app.datasaur.ai --client_id <CLIENT_ID> --client_secret <CLIENT_SECRET> --project_id <PROJECT_ID> --export_format TSV --output_file ./annotated.tsv --export_file_name annotated --export_file ./export.json --delivery_file ./get_export_delivery_status.json
+```
+> NB: 
+>
+> The "export_file" and "delivery_file" are preconfigured JSON files and will always be the same for exporting.
+> 
+> The "project_id" can be found in the URL of the Datasaur annotation project. For example, with URL ```https://app.datasaur.ai/teams/455/projects/MDI1MzI4YTU/review/c9487881-dbba-43b0-a2a8-c0575b4168e5```, the project_id is ```MDI1MzI4YTU```.
+--------------------------------------------------------------------------
+# Datasaur API Client Sample
 This repository focuses on examples in Python and only covers common use cases, hence not giving all query and mutation examples. Hopefully, these illustrations will be enough to be used as a reference for other queries and mutations.
 
 ## Prerequisites
