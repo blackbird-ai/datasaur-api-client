@@ -1,4 +1,4 @@
-# Blackbird.ai Specific documentation
+# Blackbird.AI Specific documentation
 
 ## Upload binary annotation project
 
