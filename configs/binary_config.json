@@ -107,6 +107,11 @@
                   "displayed": true,
                   "labelerRestricted": false,
                   "name": "text"
+                },
+                {
+                  "displayed": true,
+                  "labelerRestricted": true,
+                  "name": "gpt-3.5-turbo-0613_response"
                 }
               ],
               "firstRowAsHeader": true
