@@ -31,7 +31,7 @@
         "anonymizationMaskingMethod": "ASTERISK",
         "anonymizationRegExps": []
       },
-      "name": "pro-drug-TEST-test",
+      "name": "project_coso",
       "projectCreationId": "uDBzTNd4PpaCn8r7n1o8J",
       "purpose": "LABELER_TEST",
       "kinds": [
@@ -42,7 +42,7 @@
           "teamMemberId": "6038",
           "documents": [
             {
-              "fileName": "pro_drug_predict_set_zero_shot.tsv",
+              "fileName": "file_coso.tsv",
               "part": 0
             }
           ],
@@ -52,7 +52,7 @@
           "teamMemberId": "6043",
           "documents": [
             {
-              "fileName": "pro_drug_predict_set_zero_shot.tsv",
+              "fileName": "file_coso.tsv",
               "part": 0
             }
           ],
@@ -78,11 +78,11 @@
       "teamId": "455",
       "documents": [
         {
-          "fileName": "pro_drug_predict_set_zero_shot.tsv",
+          "fileName": "file_coso.tsv",
           "file": {
-            "path": "pro_drug_predict_set_zero_shot.tsv"
+            "path": "file_coso.tsv"
           },
-          "name": "pro-drug-TEST-test",
+          "name": "coso",
           "settings": {
             "questions": [
               {
@@ -92,13 +92,17 @@
                   "options": [
                     {
                       "id": "1",
-                      "label": "pro-drug-use"
+                      "label": "coso"
+                    },
+                    {
+                      "id": "2",
+                      "label": "not coso"
                     }
                   ]
                 },
                 "bindToColumn": "gpt-3.5-turbo-0613_response",
                 "name": "Q1",
-                "label": "Is this pro-drug-use or not?",
+                "label": "Is this coso or not?",
                 "required": false
               }
             ]
