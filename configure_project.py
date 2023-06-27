@@ -44,6 +44,9 @@ def main(
     # Read the JSON file
     with open(project_template, "r") as file:
         data = json.load(file)
+    
+    json_string = json.dumps(data, indent=4)  # Convert dictionary to JSON string with indentation
+    print(f"HERE IS THE FILE {project_template}\n\n",json_string)
 
     # # Read CONFIG
     # CONFIG = read_config_file(global_config_path)
@@ -72,9 +75,7 @@ def main(
     data["variables"]["input"]["documents"][0]["settings"]["questions"][0]["config"][
         "options"
     ][0]["label"] = positive_label
-    data["variables"]["input"]["documents"][0]["settings"]["questions"][0]["config"][
-        "options"
-    ][1]["label"] = negative_label
+    data["variables"]["input"]["documents"][0]["settings"]["questions"][0]["config"]["options"][1]["label"] = negative_label
     # Write the updated data back to the JSON file
     with open(
         config_output,
