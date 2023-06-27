@@ -75,6 +75,8 @@ def main(
     data["variables"]["input"]["documents"][0]["settings"]["questions"][0]["config"][
         "options"
     ][0]["label"] = positive_label
+    json_string = json.dumps(data["variables"]["input"]["documents"][0]["settings"]["questions"][0]["config"]["options"], indent=4)  # Convert dictionary to JSON string with indentation
+    print(f"HERE IS THE FILE {project_template}\n\n",json_string)
     data["variables"]["input"]["documents"][0]["settings"]["questions"][0]["config"]["options"][1]["label"] = negative_label
     # Write the updated data back to the JSON file
     with open(
