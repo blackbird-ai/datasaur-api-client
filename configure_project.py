@@ -44,21 +44,12 @@ def main(
     # Read the JSON file
     with open(project_template, "r") as file:
         data = json.load(file)
-    
-    json_string = json.dumps(data, indent=4)  # Convert dictionary to JSON string with indentation
-    print(f"HERE IS THE FILE {project_template}\n\n",json_string)
-
     # # Read CONFIG
-    # CONFIG = read_config_file(global_config_path)
     logger.info(f"COHORT NAME: {cohort_name}")
     logger.info(f"POSITIVE LABEL: {positive_label}")
     logger.info(f"NEGATIVE LABEL: {negative_label}")
 
-    # new_document_path = f'./datasaur-api-client/create-project-async/documents/{document_path.split("/")[-1]}'
     logger.info(f"Document path: {document_path}")
-    # logger.info(f"NEW document path: {new_document_path}")
-    # Move the file
-    #shutil.move(document_path, new_document_path)
 
     # Update the values for the specified keys
     data["variables"]["input"]["name"] = get_project_name(cohort_name)
@@ -75,16 +66,16 @@ def main(
     data["variables"]["input"]["documents"][0]["settings"]["questions"][0]["config"][
         "options"
     ][0]["label"] = positive_label
-    json_string = json.dumps(data["variables"]["input"]["documents"][0]["settings"]["questions"][0]["config"]["options"], indent=4)  # Convert dictionary to JSON string with indentation
-    print(f"HERE IS THE FILE {project_template}\n\n",json_string)
     data["variables"]["input"]["documents"][0]["settings"]["questions"][0]["config"]["options"][1]["label"] = negative_label
     # Write the updated data back to the JSON file
     with open(
         config_output,
         "w",
     ) as file:
-        # with open(project_configuration_path, 'w') as file:
         json.dump(data, file, indent=4)
+    json_string = json.dumps(data, indent=4)  # Convert dictionary to JSON string with indentation
+    logger.info(f"HERE IS THE REFORMATTED DATASAUR PROJECT CONFIG {project_template}\n\n {json_string}")
+
 
 
 if __name__ == "__main__":
