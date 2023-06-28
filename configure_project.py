@@ -56,29 +56,23 @@ def main(
     data["variables"]["input"]["documents"][0]["fileName"] = document_path.split(
         "/"
     )[-1]
-    logger.info(f"PASSED 1")
     data["variables"]["input"]["documents"][0]["name"] = document_path.split("/")[-1]
-    logger.info(f"PASSED 2")
     for i in data["variables"]["input"]["documentAssignments"]:
         i["documents"][0]["fileName"] = document_path.split("/")[-1]
     data["variables"]["input"]["documents"][0]["file"]["path"] = document_path
-    logger.info(f"PASSED 3")
     data["variables"]["input"]["documents"][0]["settings"]["questions"][0][
         "label"
     ] = f"Does this post reflect {positive_label} opinion?"
-    logger.info(f"PASSED 4")
     data["variables"]["input"]["documents"][0]["settings"]["questions"][0]["config"][
         "options"
     ][0]["label"] = positive_label
-    logger.info(f"PASSED 5")
     data["variables"]["input"]["documents"][0]["settings"]["questions"][0]["config"]["options"][1]["label"] = negative_label
-    logger.info(f"PASSED 6")
     # Write the updated data back to the JSON file
     with open(config_output,"w",) as file:
         json.dump(data, file, indent=4)
     json_string = json.dumps(data, indent=4)  # Convert dictionary to JSON string with indentation
     logger.info(f"HERE IS THE REFORMATTED DATASAUR PROJECT CONFIG {project_template}\n\n {json_string}")
-    logger.info(f"PASSED 7")
+    logger.info(f"END")
 
 
 
@@ -86,6 +80,6 @@ if __name__ == "__main__":
     logger.info("Datasaur Project Configuration")
     start_time = time.time()
     Fire(main)
-    # Calculate elapsed time
+    #### Calculate elapsed time
     elapsed_time = time.time() - start_time
     logger.info(f"Project configuration elapsed time: {elapsed_time:.2f} seconds")
