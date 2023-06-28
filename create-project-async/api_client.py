@@ -2,7 +2,7 @@ import fire
 from os import environ
 from src.project import Project
 from src.job import Job
-
+import time
 ## 
 
 def create_project(
@@ -41,4 +41,9 @@ def get_job_status(base_url, client_id, client_secret, job_id):
 
 if __name__ == "__main__":
     environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1"
+    print("Creating Datasaur project...")
+    start_time = time.time()
     fire.Fire()
+    # Calculate elapsed time
+    elapsed_time = time.time() - start_time
+    print(f"Total elapsed time: {elapsed_time:.2f} seconds")
