@@ -1,3 +1,5 @@
+
+import re
 import json
 import os
 import time
@@ -16,28 +18,43 @@ from requests_oauthlib import OAuth2Session
 POOLING_INVERVAL = 0.5  # 0.5s
 
 
-def save_file_to_tsv(content=None, output_file=None):
+def extract_keyword(annotator_email: str):
+    return annotator_email.split('@')[0].lower()
+
+# def extract_file_path(file_list=None,annotator_email=None):
+#     keyword = extract_keyword(annotator_email)
+#     print(f"Looking for annotations from {keyword}")
+#     for file_path in file_list:
+#         if keyword in file_path and file_path.endswith("predict_set.tsv"):
+#             return file_path
+#     return None  # Return None if the file path is not found
+
+
+def extract_file_path(file_list=None,annotator_email=None):
+    keyword = extract_keyword(annotator_email)
+    print(f"Looking for annotations from {keyword}")
+    pattern = re.compile(r".*{}.*\.tsv$".format(keyword))
+    for file_path in file_list:
+        if pattern.match(file_path):
+            print(f"Extracting annotations from {file_path}")
+            return file_path
+    return None  # Return None if the file path is not found
+
+def save_file_to_tsv(content=None, output_file=None, annotator_email='thomas@blackbird.ai'):
     data_stream = BytesIO(content)
     # Open the ZIP archive
     with zipfile.ZipFile(data_stream, "r") as archive:
         file_list = archive.namelist()
-        for file in file_list:
-            print(file)
-            if (file.endswith("tsv")):
-                # Read the contents of a specific file
-                specific_file_content = archive.read(file)
-                data = specific_file_content.decode("utf-8")
-                data_stream = io.StringIO(data)
-                df = pd.read_csv(data_stream, sep="\t")
-                print(df.head())
-            if (file.endswith("tsv")) and ("REVIEW" in file):
-                # Read the contents of a specific file
-                specific_file_content = archive.read(file)
-                data = specific_file_content.decode("utf-8")
-                data_stream = io.StringIO(data)
-                df = pd.read_csv(data_stream, sep="\t")
-                df.to_csv(output_file, sep="\t", index=False)
-                print("Success downloading the file. Output file:" + output_file)
+        file_path = extract_file_path(file_list=file_list,annotator_email=annotator_email)
+        specific_file_content = archive.read(file_path)
+        data = specific_file_content.decode("utf-8")
+        data_stream = io.StringIO(data)
+        df = pd.read_csv(data_stream, sep="\t")
+        print("SAMPLE OF ANNOTIONS",df.head())
+        if 'response' in df.columns:
+            print("VALUE COUNTS\n\n",df.response.value_counts())
+        df.to_csv(output_file, sep="\t", index=False)
+        print("Success downloading the file. Output file:" + output_file)
 
 
 def export_project(
@@ -47,6 +64,7 @@ def export_project(
     project_id: str,
     export_format: str,
     export_file_name: str = None,
+    annotator_email: str = 'thomas@blackbird.ai',
     output_dir: str = None,
     output_file: str = None,
     export_file: str = "./datasaur-api-client/export.json",
@@ -75,7 +93,7 @@ def export_project(
             if output_file:
                 directory = os.path.dirname(output_file)
                 os.makedirs(directory, exist_ok=True)
-                save_file_to_tsv(content=file_response.content, output_file=output_file)
+                save_file_to_tsv(content=file_response.content, output_file=output_file, annotator_email=annotator_email)
             if output_dir:
                 os.makedirs(output_dir, exist_ok=True)
                 file_response_url = urlparse(file_url)
