@@ -21,15 +21,6 @@ POOLING_INVERVAL = 0.5  # 0.5s
 def extract_keyword(annotator_email: str):
     return annotator_email.split('@')[0].lower()
 
-# def extract_file_path(file_list=None,annotator_email=None):
-#     keyword = extract_keyword(annotator_email)
-#     print(f"Looking for annotations from {keyword}")
-#     for file_path in file_list:
-#         if keyword in file_path and file_path.endswith("predict_set.tsv"):
-#             return file_path
-#     return None  # Return None if the file path is not found
-
-
 def extract_file_path(file_list=None,annotator_email=None):
     keyword = extract_keyword(annotator_email)
     print(f"Looking for annotations from {keyword}")
@@ -38,18 +29,52 @@ def extract_file_path(file_list=None,annotator_email=None):
         if pattern.match(file_path):
             print(f"Extracting annotations from {file_path}")
             return file_path
+    print(f"NO ANNOTATIONS FOUND for {annotator_email}")
     return None  # Return None if the file path is not found
 
-def save_file_to_tsv(content=None, output_file=None, annotator_email='thomas@blackbird.ai'):
+def get_consistent_annotations(df1, df2, df3=None):
+    if df3 is None:
+        merged_df = pd.merge(df1, df2, on='id', suffixes=('_1', '_2'))
+        agreed_annotations = merged_df[merged_df['response_1'] == merged_df['response_2']]
+    else:
+        merged_df = pd.merge(df1, df2, on='id', suffixes=('_1', '_2'))
+        merged_df = pd.merge(merged_df, df3, on='id')
+        agreed_annotations = merged_df[
+            (merged_df['response_1'] == merged_df['response_2']) |
+            (merged_df['response_1'] == merged_df['response_3']) |
+            (merged_df['response_2'] == merged_df['response_3'])
+        ]
+    agreed_annotations = agreed_annotations.rename(columns={'text_1': 'text', 'response_1': 'response'})
+    return agreed_annotations
+
+
+def get_annotators(annotator_emails=None):
+    return annotator_emails.split(',')
+
+
+def save_file_to_tsv(content=None, output_file=None, annotator_emails='thomas@blackbird.ai'):
+    annotator_emails = get_annotators(annotator_emails=annotator_emails)
+
     data_stream = BytesIO(content)
     # Open the ZIP archive
     with zipfile.ZipFile(data_stream, "r") as archive:
         file_list = archive.namelist()
-        file_path = extract_file_path(file_list=file_list,annotator_email=annotator_email)
-        specific_file_content = archive.read(file_path)
-        data = specific_file_content.decode("utf-8")
-        data_stream = io.StringIO(data)
-        df = pd.read_csv(data_stream, sep="\t")
+        annotation_frames= []
+        for annotator_email in annotator_emails:
+            file_path = extract_file_path(file_list=file_list,annotator_email=annotator_email)
+            specific_file_content = archive.read(file_path)
+            data = specific_file_content.decode("utf-8")
+            data_stream = io.StringIO(data)
+            tmp_df = pd.read_csv(data_stream, sep="\t")
+            annotation_frames.append(tmp_df)
+        if len(annotation_frames) == 2:
+            df = get_consistent_annotations(annotation_frames[0], annotation_frames[1])
+        elif len(annotation_frames) == 1:
+            df = annotation_frames[0]
+        elif len(annotation_frames) == 3:
+            df = get_consistent_annotations(annotation_frames[0], annotation_frames[1], annotation_frames[2])
+        else:
+            raise ValueError(f"Number of annotators should be 1, 2 or 3 but found {len(annotation_frames)}")
         print("SAMPLE OF ANNOTIONS",df.head())
         if 'response' in df.columns:
             print("VALUE COUNTS\n\n",df.response.value_counts())
@@ -64,7 +89,7 @@ def export_project(
     project_id: str,
     export_format: str,
     export_file_name: str = None,
-    annotator_email: str = 'thomas@blackbird.ai',
+    annotator_emails: str = 'thomas@blackbird.ai',
     output_dir: str = None,
     output_file: str = None,
     export_file: str = "./datasaur-api-client/export.json",
@@ -93,7 +118,7 @@ def export_project(
             if output_file:
                 directory = os.path.dirname(output_file)
                 os.makedirs(directory, exist_ok=True)
-                save_file_to_tsv(content=file_response.content, output_file=output_file, annotator_email=annotator_email)
+                save_file_to_tsv(content=file_response.content, output_file=output_file, annotator_emails=annotator_emails)
             if output_dir:
                 os.makedirs(output_dir, exist_ok=True)
                 file_response_url = urlparse(file_url)
