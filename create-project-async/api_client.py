@@ -13,17 +13,17 @@ def create_project(
     documents_path="./datasaur-api-client/create-project-async/documents",
     operations_path="./datasaur-api-client/create-project-async/project_configuration.json",
 ):
-    try:
-        Project.create(
-            base_url,
-            client_id,
-            client_secret,
-            team_id=str(team_id),
-            operations_path=operations_path,
-            documents_path=documents_path,
-        )
-    except Exception as e:
-        raise SystemExit(e)
+    # try:
+    Project.create(
+        base_url,
+        client_id,
+        client_secret,
+        team_id=str(team_id),
+        operations_path=operations_path,
+        documents_path=documents_path,
+    )
+    # except Exception as e:
+    #     raise SystemExit(e)
 
 
 def get_job_status(base_url, client_id, client_secret, job_id):
