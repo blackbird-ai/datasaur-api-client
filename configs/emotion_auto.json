@@ -166,11 +166,6 @@
               {
                 "displayed": true,
                 "labelerRestricted": false,
-                "name": "lang_code"
-              },
-              {
-                "displayed": true,
-                "labelerRestricted": false,
                 "name": "platform_name"
               },
               {
