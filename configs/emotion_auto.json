@@ -1,0 +1,194 @@
+{
+  "operationName": "LaunchTextProjectAsyncMutation",
+  "variables": {
+    "input": {
+      "tagNames": [
+        "emotion"
+    ],
+      "documentSettings": {
+        "sentenceSeparator": "\n",
+        "displayedRows": -1,
+        "mediaDisplayStrategy": "THUMBNAIL",
+        "viewer": "TABULAR",
+        "viewerConfig": {},
+        "firstRowAsHeader": true,
+        "enableTabularMarkdownParsing": false,
+        "enableAnonymization": false,
+        "anonymizationEntityTypes": [
+          "PERSON",
+          "DATE_TIME",
+          "EMAIL_ADDRESS",
+          "PHONE_NUMBER",
+          "ORGANIZATION",
+          "LOCATION",
+          "DOMAIN_NAME",
+          "IP_ADDRESS",
+          "US_PASSPORT",
+          "CREDIT_CARD",
+          "US_SSN",
+          "US_ITIN",
+          "US_BANK_NUMBER",
+          "US_DRIVER_LICENSE",
+          "IBAN_CODE"
+        ],
+        "anonymizationMaskingMethod": "ASTERISK",
+        "anonymizationRegExps": []
+      },
+      "name": "test",
+      "projectCreationId": "-DTpZa9dlZbP8qb2hYpu5",
+      "purpose": "LABELING",
+      "kinds": [
+        "ROW_BASED"
+      ],
+      "documentAssignments": [
+        {
+          "teamMemberId": "6038",
+          "documents": [
+            {
+              "fileName": "he_emotion_validation_datasaur.tsv",
+              "part": 0
+            }
+          ],
+          "role": "LABELER_AND_REVIEWER"
+        }
+      ],
+      "splitDocumentOption": null,
+      "projectSettings": {
+        "autoMarkDocumentAsComplete": false,
+        "enableEditLabelSet": true,
+        "hideLabelerNamesDuringReview": false,
+        "hideLabelsFromInactiveLabelSetDuringReview": false,
+        "hideOriginalSentencesDuringReview": true,
+        "hideRejectedLabelsDuringReview": true,
+        "labelerProjectCompletionNotification": {
+          "enabled": false,
+          "threshold": 1
+        },
+        "shouldConfirmUnusedLabelSetItems": false,
+        "conflictResolution": {
+          "mode": "PEER_REVIEW",
+          "consensus": 1
+        },
+        "enableReviewerEditSentence": true,
+        "enableEditSentence": true
+      },
+      "teamId": "455",
+      "documents": [
+        {
+          "fileName": "he_emotion_validation_datasaur.tsv",
+          "file": {
+            "path": "he_emotion_validation_datasaur.tsv"
+          },
+          "name": "test",
+          "settings": {
+            "questions": [
+              {
+                "type": "DROPDOWN",
+                "config": {
+                  "multiple": false,
+                  "options": [
+                    {
+                      "id": "1",
+                      "label": "yes",
+                      "parentId": null
+                    },
+                    {
+                      "id": "2",
+                      "label": "no",
+                      "parentId": null
+                    }
+                  ]
+                },
+                "name": "Do the emotions expressed in text column accurately align with the llm labels provided? ",
+                "label": "Do the emotions expressed in text column accurately align with the llm labels provided? ",
+                "required": false
+              },
+              {
+                "type": "DROPDOWN",
+                "config": {
+                  "multiple": true,
+                  "options": [
+                    {
+                      "id": "1",
+                      "label": "neutral",
+                      "parentId": null
+                    },
+                    {
+                      "id": "2",
+                      "label": "sadness",
+                      "parentId": null
+                    },
+                    {
+                      "id": "3",
+                      "label": "disgust",
+                      "parentId": null
+                    },
+                    {
+                      "id": "4",
+                      "label": "surprise",
+                      "parentId": null
+                    },
+                    {
+                      "id": "5",
+                      "label": "fear",
+                      "parentId": null
+                    },
+                    {
+                      "id": "6",
+                      "label": "joy",
+                      "parentId": null
+                    },
+                    {
+                      "id": "7",
+                      "label": "anger",
+                      "parentId": null
+                    }
+                  ]
+                },
+                "name": "If no, what are the correct emotions expressed?",
+                "label": "If no, what are the correct emotions expressed?",
+                "required": false
+              }
+            ]
+          },
+          "docFileOptions": {
+            "customHeaderColumns": [
+              {
+                "displayed": true,
+                "labelerRestricted": false,
+                "name": "id"
+              },
+              {
+                "displayed": true,
+                "labelerRestricted": false,
+                "name": "text"
+              },
+              {
+                "displayed": true,
+                "labelerRestricted": false,
+                "name": "lang_code"
+              },
+              {
+                "displayed": true,
+                "labelerRestricted": false,
+                "name": "platform_name"
+              },
+              {
+                "displayed": true,
+                "labelerRestricted": false,
+                "name": "source"
+              },
+              {
+                "displayed": true,
+                "labelerRestricted": false,
+                "name": "llm"
+              }
+            ],
+            "firstRowAsHeader": true
+          }
+        }
+      ]
+    }
+  },
+  "query": "mutation LaunchTextProjectAsyncMutation($input: LaunchTextProjectInput!) { launchTextProjectAsync(input: $input) { job { ...JobFragment __typename } name __typename }}fragment JobFragment on Job { id status progress errors { id stack args __typename } resultId __typename}"
+}
